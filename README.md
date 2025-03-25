@@ -1,49 +1,85 @@
 # Semaphores and Shared Memory
 
-  The main program starts and creates a main part shared_memory in which it also does attach (attach the other programs in the same part shared memory). Then it makes 4 sets of 2 semaphores (8 in total), where he initializes them to 0.
-  Then the rest of the processes are made, in each of them we assign an id starting from 0 to 4. We exec the corresponding programs. The sem_child file has the code of P1 and P2 respectively. Flag 1 is P1 and is our first exec with id = 0. He is responsible for writing and reading things until he is given the TERM message where he terminates the processes. The second exec is done in the enc program. This program contains the enc1 and enc2 code respectively. With id = 1 we correspond to enc1 and with id = 3 to enc2. Their function is to encode the message via an md5 function as well as to break it to see if it has been sent correctly. The third exec is done in the chan program where the chanel with id = 2 is.
-Depending on the probability given by the user the message "spoils" by adding x in random places. The next exec is done in enc2 as we said above. Finally with id = 4 we run P2 which will read.
-  The programs can go and bring messages from left to right and vice versa until the TERM termination message is given on P1 where the program will end. In order to transfer the messages, the semaphores were used where they "sleep" and "wake up" to convey the messages. <br/> <br/> <br/>
+## Description  
 
+The main program starts by creating a shared memory segment, where it also attaches the other programs to the same shared memory segment. Then, it creates 4 sets of 2 semaphores (8 in total), initializing them to 0.
 
+Subsequently, the remaining processes are created, each assigned an id starting from 0 to 4. The corresponding programs are then executed.  
+- `sem_child` contains the code for P1 and P2. Flag 1 corresponds to P1, and it is our first execution with id = 0. P1 is responsible for writing and reading data until the TERM message is received, at which point the processes terminate.  
+- The second execution is in the `enc` program. This program contains the code for `enc1` and `enc2`. With id = 1, it corresponds to `enc1`, and with id = 3, it corresponds to `enc2`. Their function is to encode the message using an MD5 function and verify if it has been correctly transmitted.  
+- The third execution happens in the `chan` program, which handles the channel with id = 2. Depending on the probability provided by the user, the message might get "spoiled" by inserting `x` at random positions.  
+- Finally, with id = 4, P2 is executed, which is responsible for reading the message.
 
+The programs can transfer messages from left to right and vice versa until the TERM termination message is given to P1, signaling the end of the program. Semaphores are used to "sleep" and "wake up" processes to facilitate message transfer.
 
+---
 
+## Assignment 1: Operating Systems 2020
+**Stevis Charalampos-Antonius**  
+**ID: 1115201600278**
 
-ΕΡΓΑΣΙΑ 1Η ΛΕΙΤΟΥΡΓΙΚΑ ΣΥΣΤΗΜΑΤΑ 2020
-Στεβής Χαράλαμπος-Αντώνιος ΑΜ: 1115201600278
+---
 
-Περιεχόμενος εργασίας:
-Ένας φάκελος code που περιέχει:
-    Makefile
-    chan.c
-    enc.c
-    main.c
-    read_write.c
-    sem_child.c
-    shared_memory.c
-    enc.h
-    read_write.h
-    shared_memory.h
+## Contents of the Assignment
 
-README
+- **Folder `code`** containing the following:
+    - `Makefile`
+    - `chan.c`
+    - `enc.c`
+    - `main.c`
+    - `read_write.c`
+    - `sem_child.c`
+    - `shared_memory.c`
+    - `enc.h`
+    - `read_write.h`
+    - `shared_memory.h`
+    - `README.md`
 
-Πως τρέχουμε το πρόγραμμα:
-    Μέσω του Makefile κάνουμε make all και δημιουργούνται τα exec και τα .o των αρχείων.
+---
 
-    Σε ένα terminal τρέχουμε ./exe 1 (την πιθανότητα που θέλουμε σε δεκαδικο 0 εως 1 πχ:) 0.5
-    Το πρόγραμμα exe ξεκινάει και περιμένει να γράψει κάποιος.Επίσης εκτυπώνει το id του shared memory που έχει κάνει attach. Το δεύτερο όρισμα (δηλαδή το 1 σημαίνει ότι αυτό το πρόγραμμα θα γράψει πρώτο. Δηλαδή είναι το P1.
-    
+## How to Run the Program
 
-    Σε άλλο terminal τρέχουμε ./sem_child (id που έχει εκτυπώσει το exe) 0 4
-Το πρώτο όρισμα (δηλαδή το id) είναι το id στο ο οποίο θα κάνει attach το παιδί αυτο. Το δεύτερο όρισμα (δηλαδή το 0) σημαίνει ότι αυτή η διεργασία θα γράψει δεύτερη, δηλαδή ότι είναι ο P2. Το τρίτο όρισμα (δηλαδή το 4) δηλώνει το id της συγκεκριμένης διεργασίας (θα εξηγηθεί παρακάτω).
+1. **Building the Program:**  
+   Using the provided `Makefile`, compile the program with the following command:
 
-Τι κάνει το πρόγραμμα:
+   ` make all `
+This will create the executable files and the .o object files for the source code.
 
-    Το main πρόγραμμα ξεκινάει και φτιάχνει ένα κύριο κομμάτι shared_memory στο οποίο κανει και attach(attach κάνουμε και τα υπόλοιπα προγράμματα στο ίδιο κομμάτι shared memory). Ύστερα φτιάχνει 4 σετ των 2 σημαφόρων (συνολικά 8), όπου τους αρχικοποιεί σε 0. Ύστερα φτιάχνονται οι υπόλοιπος διεργασίες, σε κάθε μια από αυτές αντιστοιχίζουμε ένα id ξεκινόντας από το 0 έως το 4. Κάνουμε exec τα αντίστοιχα προγράμματα. Στο αρχείο sem_child είναι ο κώδικας των P1 και P2 αντίστοιχα. Με flag 1 είναι ο P1 όπου είναι και το πρώτο μας exec με id =0. Αυτός είναι υπέθυνος για να γράφει και να διαβάζει πράγματα μέχρι να του δωθεί το μήνυμα TERM όπου τερματίζει τις διεργασίες. Το δεύτερο exec γίνεται στο πρόγραμμα enc. Το πρόγραμμα αυτό περιέχει τον κώδικα των enc1 και enc2 αντίστοιχα. Με id=1 αντιστοιχούμε το enc1 και με id=3 το enc2. Λειτουργία τους είναι να κωδικοποιούν το μήνυμα μέσω μιας md5 συνάρτησης καθώς και να το σπάνε για να δουν αν έχει σταλθεί σωστα. Το τρίτο exec γίνεται στο πρόγραμμα chan όπου είναι το chanel με id=2 . Σε αυτό το πρόγραμμα ανάλογα με την πιθανότητα που έχει δωθεί απο τον χρήστη το μήνυμα "χαλάει" προσθένοντας x σε τυχαίες θέσεις. Το επόμενο exec έχει γίνει στο enc2 όπως είπαμε παραπάνω. Τέλος με id=4 τρέχουμε εμείς το P2 το οποίο θα διαβάζει.
-    Το πρόγραμματα μπορεί να πηγαίνει και να φέρνει μηνύματα από αριστερά προς δεξιά και το ανάποδο μέχρι να δωθεί το μήνυμα τερματισμού TERM στον P1 όπου το πρόγραμμα θα τερματίσει. ΓΙα να γίνει η μεταφορά των μηνυμάτων χρησιμοποιήθηκαν οι σημαφόρει όπου σε ζεύγει "κοιμούνται" και "ξυπνούν" για να μεταφέρουν τα μηνύματα.
-Ο τρόπος με τον οποίο λειτουργούν οι σημαφόρει είναι ότι όλοι αρχικά περιμένον. Ύστερα ξυπνάνε από τον προηγούμενο τους (αριστερά ή δεξιά τους διεργασία ανάλογα με την φορά του μηνύματος) και αφού εκτελέσουν την δουλεία τους οι ίδιοι κοιμούνται και ξυπνάνε τον επόμενό τους.
+This will create the executable files and the .o object files for the source code.
 
-Τι δεν μπορεί να κάνει το πρόγραμμα: 
-   
-    Σε περίπτωση αλλαγής του μηνύματος το πρόγραμμα δεν το διορθώνει και το μήνυμα λαμβάνεται λάθος. To πρόγραμμα δεν τερματίζει από το πρώτο μήνυμα. Το πρόγραμμα δεν διαγράφει το κομμάτι της shared_memory.
+2. **Running the Program:**  
+   In the first terminal, run the `exe` program with the probability you want (in decimal form from 0 to 1), for example, `0.5`:
+   `   ./exe 1 0.5`
+
+This will start the program and it will wait for someone to write. It will also print the id of the shared memory segment it has attached to. The second argument (e.g., 1) indicates that this program will write first, meaning it is P1.
+
+3. **Running Additional Processes:**
+In a second terminal, run the sem_child program with the id printed by the previous exe execution:
+`./sem_child <id> 0 4`
+
+The first argument is the id that the child process will attach to.  
+The second argument (`0`) indicates that this process will write second (meaning it is **P2**).  
+The third argument (`4`) is the id of the specific process (explained below).
+
+---
+
+## Functionality of the Program
+
+The main program creates and attaches multiple processes to a common **shared memory** segment. It creates 4 sets of semaphores, initializing them to 0. Then, the following processes are created:
+
+- **P1 (id = 0):** Responsible for writing and reading data until the TERM message is received, after which it terminates.
+- **Enc1 (id = 1):** Encodes the message using the MD5 function and checks whether the message was sent correctly.
+- **Enc2 (id = 3):** Verifies that the message was sent correctly.
+- **Chan (id = 2):** Introduces random errors into the message (adding `x` characters) based on the probability given by the user.
+
+The processes transfer messages using semaphores, which cause the processes to "sleep" and "wake up" as needed for message passing.
+
+The process flow can move messages from left to right and vice versa until the TERM termination message is given to P1, at which point the program stops. The semaphores ensure synchronization between the processes during the message transfer.
+
+---
+
+## Limitations of the Program
+
+- If the message is corrupted during transfer, the program does not attempt to correct it. The message is received incorrectly.
+- The program does not terminate after the first message.
+- The program does not delete the shared memory segment after the program finishes.
